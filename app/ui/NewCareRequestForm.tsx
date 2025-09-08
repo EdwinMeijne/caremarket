@@ -10,7 +10,7 @@ const initialState: CareRequestState = {
   success: false,
 };
 
-export default function CareRequestForm() {
+export default function NewCareRequestForm() {
   const [state, formAction, pending] = useActionState(
     newCareRequest,
     initialState,

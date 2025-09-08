@@ -1,6 +1,6 @@
 "use server";
 
-import { careRequests } from "@/app/actions/careRequest/careRequests";
+import { CareRequest, careRequests } from "@/app/data/careRequest/careRequests";
 import { revalidateTag } from "next/cache";
 
 export type CareType = "household" | "medical";
@@ -67,38 +67,22 @@ export async function newCareRequest(
     };
   }
 
-  try {
-    console.log("Processing care request:", {
-      careType,
-      startDateTime,
-      endDateTime,
-      clientName,
-      additionalInfo,
-    });
+  const newCareRequest: CareRequest = {
+    id: crypto.randomUUID(),
+    careType,
+    startDateTime: new Date(startDateTime),
+    endDateTime: new Date(endDateTime),
+    clientName,
+    additionalInfo,
+    status: "pending",
+  };
 
-    careRequests.push({
-      id: crypto.randomUUID(),
-      careType,
-      startDateTime: new Date(startDateTime),
-      endDateTime: new Date(endDateTime),
-      clientName,
-      additionalInfo,
-      status: "pending",
-    });
+  careRequests.push(newCareRequest);
 
-    // Refresh the cached list of care requests
-    revalidateTag("careRequests");
+  // Refresh the cached list of care requests
+  revalidateTag("careRequests");
 
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error("Error submitting care request:", error);
-    return {
-      success: false,
-      errors: {
-        general: "Failed to submit care request. Please try again.",
-      },
-    };
-  }
+  return {
+    success: true,
+  };
 }
