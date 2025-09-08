@@ -1,4 +1,6 @@
-import { CareRequest } from "@/app/actions/careRequest/careRequests";
+import { CareRequest } from "@/app/data/careRequest/careRequests";
+import Link from "next/link";
+import CareRequestCard from "@/app/ui/CareRequestCard";
 
 interface CareRequestsListProps {
   careRequests: CareRequest[];
@@ -12,7 +14,10 @@ export default function CareRequestsList({
   return (
     <ul>
       {careRequests.map((careRequest) => (
-        <li key={careRequest.id}>{careRequest.clientName}</li>
+        <li key={careRequest.id}>
+          <CareRequestCard careRequest={careRequest}></CareRequestCard>
+          <Link href={`/care-requests/${careRequest.id}`}>More info</Link>
+        </li>
       ))}
     </ul>
   );

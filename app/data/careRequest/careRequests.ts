@@ -22,3 +22,10 @@ export const careRequests: CareRequest[] = [
 export async function getCareRequests() {
   return unstable_cache(async () => careRequests, ["careRequests"])();
 }
+
+export async function getCareRequest(id: string) {
+  return unstable_cache(
+    async () => careRequests.find((cr) => cr.id === id),
+    ["careRequest", id],
+  )();
+}
